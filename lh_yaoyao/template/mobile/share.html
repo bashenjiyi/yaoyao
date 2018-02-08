@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>{$info['title']}</title>
+	<link rel="stylesheet" type="text/css" href="{LH_YAOYAO_RES}/css/idangerous.swiper.css">
+	<link rel="stylesheet" type="text/css" href="{LH_YAOYAO_RES}/css/animate.css">
+	<link rel="stylesheet" type="text/css" href="{LH_YAOYAO_RES}/css/style.css?2015021301">
+	<script type="text/javascript">
+		var params = {
+			"word" : "{$info['word']}"
+		};
+	</script>
+</head>
+<body>
+
+	<div id="loading">
+		<p>加载中，请稍候</p>
+	</div>
+	<!--
+	<div id="landscape">
+		<p>请切换到竖屏模式</p>
+	</div>
+-->
+	<div class="logo-toyota">
+		<span style="display: block; position: absolute; width: 75px; height: 24px; background: url({if $info['logo'] == 'img/logo.png'}{LH_YAOYAO_RES}/{$info['logo']}{else}{$_W['attachurl']}{$info['logo']}{/if}) 0 0 no-repeat; overflow: hidden; top: 10px;"></span>
+	</div>
+
+	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide" id="p4">
+				<div class="failure" style="display:none" id="p0">
+					<p class="tips"><strong>手滑了没抢到</strong></p>
+					<div class="sheep"></div>
+					<button class="btn-1 btn-try-again"><i></i>关注商家</button>
+					<button class="btn-1 btn-1-play btn-play" style="display:none;"><i></i>播放{php echo @urldecode($member['nickname']); }的吉祥话</button>
+				</div>
+				<!-- 中奖 iPhone -->
+				<div class="success p1" style="display:none"  id="p1">
+					<p class="tips"><strong>好运当头</strong><br /><i>羊年就是这么“横”<br />iPhone6是你的了！</i></p>
+					<div class="sheep"><span></span></div>
+					<button class="btn-1 btn-1-play btn-play" style="display:none;"><i></i>播放我的吉祥话</button>
+				</div>
+				<!-- 中奖 我买卡 -->
+				<div class="success p2" style="display:none"  id="p2">
+					<p class="tips"><strong>喜大普奔</strong><br /><i>300元我买卡是你的了！</i></p>
+					<div class="sheep"><span></span></div>
+					<button class="btn-1 btn-1-play btn-play" style="display:none;"><i></i>播放我的吉祥话</button>
+				</div>
+				<!-- 中奖 充值卡 -->
+				<div class="success p3" style="display:none"  id="p3">
+					<p class="tips"><strong>羊年开门红</strong><br /><i>50元电话卡是你的了！</i></p>
+					<div class="sheep"><span></span></div>
+					<button class="btn-1 btn-1-play btn-play" style="display:none;"><i></i>播放我的吉祥话</button>
+				</div>
+				<div class="play">
+					<div class="play-main animated">
+						<div class="content">
+							<div class="wave-record"></div>
+							<button class="btn-play-popup"></button>
+							<button class="btn-return"><i></i>返回</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="//res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+	<script src="{LH_YAOYAO_RES}/js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+		{php $signPackage = $_W['account']['jssdkconfig']}
+		wx.config({
+			debug: false,
+			appId: "{$signPackage['appId']}",
+	      	timestamp: "{$signPackage['timestamp']}", 
+	      	nonceStr: "{$signPackage['nonceStr']}", 
+	      	signature: "{$signPackage['signature']}",
+			jsApiList: [
+				'startRecord',
+				'stopRecord',
+				'onVoiceRecordEnd',
+				'playVoice',
+				'pauseVoice',
+				'uploadVoice',
+				'downloadVoice',
+				'translateVoice',
+				'onMenuShareTimeline',
+				'onMenuShareAppMessage',
+				'onMenuShareQQ',
+				'onMenuShareWeibo',
+				'closeWindow'
+			]
+		});
+	</script>
+	<script type="text/javascript">
+
+		window.load = load();
+
+		function load() {
+			$('#loading').hide();
+		}
+		
+		var voice = {
+			localId: '',// 获取localId
+			serverId: '{$serverId}'
+		};
+		//alert(voice.serverId);
+		var isSuccess = 0;
+		var recordStatus = 0;
+		var waveLeft = 0;
+		var openId = '';// 获取openId
+
+		$(function(){
+			switch(isSuccess){
+				case '0':
+					$('#p4 .success').hide();
+					$('#p4 .failure').show();
+					break;
+				case '5':
+					$('#p4 .success').hide();
+					$('#p4 .failure').hide();
+					$('#p4 .success.p1').show();
+					break;
+				case '6':
+					$('#p4 .success').hide();
+					$('#p4 .failure').hide();
+					$('#p4 .success.p2').show();
+					break;
+				case '7':
+					$('#p4 .success').hide();
+					$('#p4 .failure').hide();
+					$('#p4 .success.p3').show();
+					break;
+				default:
+					return false;
+			};
+
+			$('#p4 .btn-play').bind('touchend',function(event){
+				waveLeft = 0;
+				$('#p4 .play').show();
+				$('#p4 .play-main').addClass('bounceInDown');
+			})
+
+			$('#p4 .btn-return').bind('touchend',function(event){
+				$('#p4 .play-main').removeClass('bounceInDown');
+				$('#p4 .play-main').addClass('bounceOutUp');
+				recordStatus = 0;
+				$('#p4 .btn-play-popup').removeClass('pause');
+				wx.pauseVoice({
+					localId: voice.localId
+				});
+				setTimeout(function(){
+					$('#p4 .play').hide();
+					$('#p4 .play-main').removeClass('bounceOutUp');
+				},800);
+			})
+
+			$('#p4 .btn-play-popup').bind('touchend',function(event){
+				if ( $(this).hasClass('pause') ) {
+					recordStatus = 0;
+					$(this).removeClass('pause');
+					wx.pauseVoice({
+						localId: voice.localId
+					});
+				} else {
+					recordStatus = 1;
+					waveRecord();
+					$(this).addClass('pause');
+					wx.playVoice({
+						localId: voice.localId
+					});
+				};
+			})
+			
+			$('#p0 .btn-try-again').bind('touchend',function(event){
+				window.location.href='{$info['gzurl']}';
+			});
+
+		})
+
+		function waveRecord(){
+			if ( recordStatus == 1 ) {
+				$('.wave-record').css('background-position', waveLeft + 'px 0px');
+				waveLeft = waveLeft - 1;
+				console.log(waveLeft);
+				setTimeout('waveRecord()',20);
+			};
+		}
+
+		wx.ready(function () {
+			wx.downloadVoice({
+				serverId: voice.serverId, // 需要下载的音频的服务器端ID，由uploadVoice接口获得
+				isShowProgressTips: 1, // 默认为1，显示进度提示
+				success: function (res) {
+					voice.localId = res.localId; // 返回音频的本地ID
+					$('.btn-play').show();
+				}
+			});
+			wx.onVoicePlayEnd({
+				complete: function (res) {
+					$('#p3 .btn-play').removeClass('pause');
+					$('#p4 .btn-play-popup').removeClass('pause');
+					recordStatus = 0;
+				}
+			});
+			
+			
+			wx.onMenuShareTimeline({
+			    title: '{php echo str_replace("XX", $member["nickname"], $info["share_content"]); }', // 分享标题
+			    link: "{php echo murl('entry', array('m' => 'lh_yaoyao', 'do' => 'index'), true, true); }&id={$id}", // 分享链接
+			    imgUrl: '{$_W['attachurl']}{$info['shareimageurl']}', // 分享图标
+			    success: function () { 
+			    },
+			    cancel: function () { 
+			        // 用户取消分享后执行的回调函数
+			    }
+			});
+			
+			//获取“分享给朋友”按钮点击状态及自定义分享内容接口encodeURIComponent(encodedURIString) 
+			wx.onMenuShareAppMessage({
+				title: "{$info['share_title']}", // 分享标题
+			    desc: '{php echo str_replace("XX", $member["nickname"], $info["share_content"]); }', // 分享描述
+			    link: "{php echo murl('entry', array('m' => 'lh_yaoyao', 'do' => 'index'), true, true); }&id={$id}", // 分享链接
+			    imgUrl: '{$_W['attachurl']}{$info['shareimageurl']}', // 分享图标
+			    type: '', // 分享类型,music、video或link，不填默认为link
+			    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+			    success: function () { 
+			    },
+			    cancel: function () { 
+			        // 用户取消分享后执行的回调函数
+			    }
+			});
+			
+		});
+		
+	</script>
+
+	
+	<input type='hidden' value='0' id="winning_daprize_id"/>
+	<script defer="defer">
+	checkdaprize();
+	function checkdaprize(){
+		
+		if(0=="0"){
+			isSuccess="0";
+			$("#p0").css("display","block");
+		}
+		else if(0=="5"){
+			$("#p1").css("display","block");
+			isSuccess="5";
+		}
+		else if(0=="6"){
+			$("#p2").css("display","block");
+			isSuccess="6";
+			
+		}
+		else if(0=="7"){
+			isSuccess="7";
+			$("#p3").css("display","block");
+		}
+		
+	}
+		
+	</script>
+	
+</body>
+</html>

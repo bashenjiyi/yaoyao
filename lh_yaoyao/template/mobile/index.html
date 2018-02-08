@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>{$info['title']}</title>
+	<link rel="stylesheet" type="text/css" href="{LH_YAOYAO_RES}/css/idangerous.swiper.css">
+	<link rel="stylesheet" type="text/css" href="{LH_YAOYAO_RES}/css/animate.css">
+	<link rel="stylesheet" type="text/css" href="{LH_YAOYAO_RES}/css/style.css?2015021301">
+	<script type="text/javascript">
+		var params = {
+			"word" : "{$info['word']}"
+		};
+	</script>
+</head>
+<body>
+
+	<div id="loading">
+		<p>加载中，请稍候</p>
+	</div>
+	
+	<!--
+	<div id="landscape">
+		<p>请切换到竖屏模式</p>
+	</div>
+	-->
+	
+	<div class="logo-toyota">
+		<span style="display: block; position: absolute; width: 75px; height: 24px; background: url({if $info['logo'] == 'img/logo.png'}{LH_YAOYAO_RES}/{$info['logo']}{else}{$_W['attachurl']}{$info['logo']}{/if}) 0 0 no-repeat; overflow: hidden; top: 10px;"></span>
+	</div>
+
+	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide" id="p0">
+				<div class="banner animated" style="position: absolute; width: 87.5%; height: 100%; left: 6.25%; background: url({if $info['introimageurl'] == 'img/pic-index-1.png'}{LH_YAOYAO_RES}/{$info['introimageurl']}{else}{$_W['attachurl']}{$info['introimageurl']}{/if}) 0 0 no-repeat;"></div>
+				<div class="red">
+					<div class="red-1 animated"><span><img src="{LH_YAOYAO_RES}/img/19x14.png"></span></div>
+					<div class="red-2 animated"><span><img src="{LH_YAOYAO_RES}/img/19x14.png"></span></div>
+					<div class="red-3 animated"><span><img src="{LH_YAOYAO_RES}/img/19x14.png"></span></div>
+				</div>
+				<button class="btn-1 btn-play"><i></i>开始游戏</button>
+				<p class="btn-rule"><a href="#">游戏规则</a></p>
+				<div class="rule">
+					<div class="rule-main animated" style="background: url({if $info['ruleimageurl'] == 'img/bg-rule-1.png'}{LH_YAOYAO_RES}/{$info['ruleimageurl']}{else}{$_W['attachurl']}{$info['ruleimageurl']}{/if}) 0 0 no-repeat;">
+						<div class="content">
+							<h3><span>游戏说明</span></h3>
+							<ul class="explain">
+								{php echo htmlspecialchars_decode($info['description']); }
+							</ul>
+							<button class="btn-return"><i></i>返回</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="swiper-slide" id="p1">
+				<div class="firecrackers f1 animated">
+					<div class="light"></div>
+					<p class="tips">只摇响了<span></span>%的炮竹<br />用力摇晃继续点燃鞭炮~</p>
+				</div>
+				<div class="shake-tips">
+					<span></span>
+					<p>摇动手机<br /><strong>点燃鞭炮吧</strong></p>
+				</div>
+				<div class="car marquee" style="opacity: 1;">
+					{loop $advList $adv}
+					<div>
+						<p style="width: 50vw; height: 28.125vw; background: url({if $adv['imageurl'] == 'img/bg-title-3.png'}{LH_YAOYAO_RES}/{$adv['imageurl']}{else}{$_W['attachurl']}{$adv['imageurl']}{/if}) 0 0 no-repeat; color: #fff; font-size: 3.5vw; padding-left: 50vw; line-height: 36vw;">{$adv['name']}</p>
+					</div>
+					{/loop}
+				</div>
+				<button class="btn-1 btn-play"><i></i>点燃鞭炮吧</button>
+			</div>
+			<div class="swiper-slide" id="p2">
+				<p class="tips">请您按住按钮大喊</p>
+				<div class="slogan animated" style="width: 78.125vw; height: 40.625vw; margin: 4vw auto 0 auto; background: url({if $info['pyimageurl'] == 'img/pic-slogan-1.png'}{LH_YAOYAO_RES}/{$info['pyimageurl']}{else}{$_W['attachurl']}{$info['pyimageurl']}{/if}) 0 0 no-repeat;"></div>
+				<div class="record">
+					<div class="wave-record"></div>
+					<button class="btn-record"></button>
+					<p class="tips-record">按住话筒录音</p>
+					<input type="hidden" id="voice-result">
+					<input type="hidden" id="voice-result2">
+				</div>
+			</div>
+			<div class="swiper-slide" id="p3">
+				<p class="tips">听听<br /><input type="text" value="{$member['nickname']}" class="username" id="nickname" onchange="shareVoice()">的<strong>吉祥话</strong></p>
+				<button class="btn-play"></button>
+				<button class="btn-1 btn-back"><i></i>返回重录</button>
+				<button class="btn-1 btn-open"><i></i>打开红包</button>
+				<div class="red">
+					<div class="red-main animated"></div>
+				</div>
+				<div class="share-tips"><p>让好友听听我的新年祝福</p><span class="animated fadeInUp infinite "></span></div>
+			</div>
+			<div class="swiper-slide" id="p4">
+				<!-- 未中奖 -->
+				<div class="failure" id="pp0">
+					<p class="tips" id="prizeinfo"></p>
+					<div class="sheep"></div>
+					<button class="btn-1 btn-try-again"><i></i>再来一次</button>
+					<button class="btn-1 btn-1-play btn-play"><i></i>播放我的吉祥话</button>
+				</div>
+				<!-- 中奖 iPhone -->
+				<div class="success p1" style="display:none"  id="pp1">
+					<p class="tips"><strong>好运当头</strong><br /><i>羊年就是这么“横”<br />iPhone6是你的了！</i></p>
+					<div class="sheep"><span></span></div>
+					<button class="btn-1 btn-1-s btn-input"><i></i>填写您的资料</button>
+					<button class="btn-1 btn-1-play btn-play"><i></i>播放我的吉祥话</button>
+					<p class="attention">请您留下个人信息，领取您的羊年大礼</p>
+				</div>
+				<!-- 中奖 我买卡 -->
+				<div class="success p2" style="display:none" id="pp2">
+					<p class="tips"><strong>喜大普奔</strong><br /><i>300元我买卡是你的了！</i></p>
+					<div class="sheep"><span></span></div>
+					<button class="btn-1 btn-1-s btn-input"><i></i>填写您的资料</button>
+					<button class="btn-1 btn-1-play btn-play"><i></i>播放我的吉祥话</button>
+					<p class="attention">请您留下个人信息，领取您的羊年大礼</p>
+				</div>
+				<!-- 中奖 充值卡 -->
+				<div class="success p3" style="display:none"  id="pp3">
+					<p class="tips"><strong>羊年开门红</strong><br /><i>50元电话卡是你的了！</i></p>
+					<div class="sheep"><span></span></div>
+					<button class="btn-1 btn-1-s btn-input"><i></i>填写您的资料</button>
+					<button class="btn-1 btn-1-play btn-play"><i></i>播放我的吉祥话</button>
+					<p class="attention">请您留下个人信息，领取您的羊年大礼</p>
+				</div>
+				<div class="play">
+					<div class="play-main animated">
+						<div class="content">
+							<div class="wave-record"></div>
+							<button class="btn-play-popup"></button>
+							<button class="btn-return"><i></i>返回</button>
+						</div>
+					</div>
+				</div>
+				<div class="share-tips"><p>红包就在这里，告诉你的好友来抢吧~</p></div>
+			</div>
+			<div class="swiper-slide" id="p5">
+				<h3>请您填写中奖信息</h3>
+				<div class="input">
+					<dl>
+						<dt>姓名</dt>
+						<dd><input type="text" id='username'></dd>
+					</dl>
+					<dl>
+						<dt>手机</dt>
+						<dd><input type="tel" id='tel'></dd>
+					</dl>
+					<dl>
+						<dt>联系地址</dt>
+						<dd>
+							<select class="s1" id='province'>
+							<option value="0">不限</option><option value="851">北京</option><option value="871">上海</option><option value="892">广东</option><option value="1579">浙江</option><option value="1376">四川</option><option value="1834">山东</option><option value="2313">河北</option><option value="1037">江苏</option><option value="1208">天津</option><option value="1702">辽宁</option><option value="2147">河南</option><option value="355">福建</option><option value="585">湖北</option><option value="701">湖南</option><option value="2519">安徽</option><option value="2647">黑龙江</option><option value="3249">陕西</option><option value="2023">广西</option><option value="464">江西</option><option value="199">重庆</option><option value="2983">山西</option><option value="241">贵州</option><option value="3125">内蒙古</option><option value="2811">吉林</option><option value="847">香港特别行政区</option><option value="1228">云南</option><option value="80">新疆</option><option value="3367">甘肃</option><option value="849">澳门特别行政区</option><option value="53">宁夏</option><option value="839">台湾省</option><option value="1184">海南</option><option value="2901">西藏</option><option value="1">青海</option>
+							</select>
+							<select class="s2" id='city'>
+								<option>省市</option>
+							</select>
+						</dd>
+						<dd>
+							<select class="s2" id='area'>
+								<option>区县</option>
+							</select>
+						</dd>
+						<dd><input type="text" id="address"></dd>
+					</dl>
+					 
+				</div>
+				<button class="btn-1 btn-submit"><i></i>提交信息</button>
+				<p class="tips">您的奖品将依照您填写的信息派发</p>
+				
+				<div class="success">
+					<div class="share-tips"><p>告诉小伙伴这里有疯6！</p><span class="animated fadeInUp infinite "></span></div>
+					<div class="success-main animated">
+						<div class="content">
+							<p>感谢您的参与<br />祝您<br />羊年吉祥，阖家欢乐！</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="btn-music"><a href="#" class="on"></a></div>
+
+	<audio preload="auto" style="width:0;height:0" id="audio-firecrackers">
+		<source src="{LH_YAOYAO_RES}/firecrackers.mp3" type="audio/mpeg" />
+	</audio>
+
+	<audio preload="auto" autoplay="autoplay" loop="true" style="width:0;height:0" id="audio-music">
+		<source src="{LH_YAOYAO_RES}/music.mp3" type="audio/mpeg" />
+	</audio>
+	
+	<input type="hidden" id="openid" value="" />
+	<input type="hidden" id="uid" value="{$uid}" />
+	<input type="hidden" id="nickname" value="{$member['nickname']}" />
+	<input type="hidden" id="winning_id" value="{$info['id']}" />
+	<input type="hidden" id="localId" />
+	<input type="hidden" id="localName" />
+	<input type="hidden" id="starturl" value="1" />
+
+	<script src="//res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+	<script src="{LH_YAOYAO_RES}/js/jquery-2.1.1.min.js"></script>
+	<script src="{LH_YAOYAO_RES}/js/idangerous.swiper.min.js"></script>
+	<script src="{LH_YAOYAO_RES}/js/pinyin.js"></script>
+	<script src="{LH_YAOYAO_RES}/js/jquery.marquee.min.js"></script>
+<script type="text/javascript">
+	{php $signPackage = $_W['account']['jssdkconfig']}
+	wx.config({
+	      debug: false,
+	      appId: "{$signPackage['appId']}",
+	      timestamp: "{$signPackage['timestamp']}", 
+	      nonceStr: "{$signPackage['nonceStr']}", 
+	      signature: "{$signPackage['signature']}",
+	      jsApiList: [
+	        'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'uploadVoice',
+            'translateVoice',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'closeWindow'
+	      ]
+	});
+</script>
+<script src="{LH_YAOYAO_RES}/js/common.js?v={TIMESTAMP}"></script>
+<script src="{LH_YAOYAO_RES}/js/door.js?v={TIMESTAMP}"></script>
+
+<script type="text/javascript">
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return "";
+}
+
+$(function(){
+	var gDebug = getQueryString("debug");
+	if (gDebug == "debug") {
+		$.getScript("{LH_YAOYAO_RES}/js/vconsole.min.js", function() {
+			window.vConsole = new window.VConsole();
+		});
+		
+		$('#p3 .red-main').trigger('touchend');
+	}
+	
+	{if $info['frontAdvFlag'] == '1' && !empty($info['frontAdv'])}
+		new door('h', "{$_W['attachurl']}{$info['frontAdv']}");
+	{/if}
+});
+
+var openStatus = 1;//抽奖点击
+var inputStatus = 1;
+
+wx.ready(function () {
+	wx.onMenuShareTimeline({
+	    title: '{php echo str_replace("XX", $member["nickname"], $info["share_content"]); }', // 分享标题
+	    link: "{php echo murl('entry', array('m' => 'lh_yaoyao', 'do' => 'share'), true, true); }&serverId="+voice.serverId + "&id="+$('#winning_id').val()+"&uid="+$('#uid').val(), // 分享链接
+	    imgUrl: '{$_W['attachurl']}{$info['shareimageurl']}', // 分享图标
+	    success: function () { 
+	    },
+	    cancel: function () { 
+	        // 用户取消分享后执行的回调函数
+	    }
+	});
+	
+	//获取“分享给朋友”按钮点击状态及自定义分享内容接口encodeURIComponent(encodedURIString) 
+	wx.onMenuShareAppMessage({
+		title: "{$info['share_title']}", // 分享标题
+	    desc: '{php echo str_replace("XX", $member["nickname"], $info["share_content"]); }', // 分享描述
+	    link: "{php echo murl('entry', array('m' => 'lh_yaoyao', 'do' => 'share'), true, true); }&serverId="+voice.serverId + "&id="+$('#winning_id').val()+"&uid="+$('#uid').val(), // 分享链接
+	    imgUrl: '{$_W['attachurl']}{$info['shareimageurl']}', // 分享图标
+	    type: '', // 分享类型,music、video或link，不填默认为link
+	    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+	    success: function () { 
+	    },
+	    cancel: function () { 
+	        // 用户取消分享后执行的回调函数
+	    }
+	});
+})
+
+//保存声音/cj
+function saveVoice(localId,username){
+	
+	wx.uploadVoice({
+		localId: voice.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+		isShowProgressTips: 1, // 默认为1，显示进度提示
+		success: function (res) {
+			voice.serverId = res.serverId; // 返回音频的服务器端ID
+			shareVoice();
+		}
+	});
+	
+	shareResult();
+	
+	var openid=$("#openid").val();
+	var winning_id=$("#winning_id").val();
+}
+
+function shareVoice(){
+}
+
+function shareResult(){
+
+}
+
+// 打开红包
+$('#p3 .red-main').bind('touchend',function(event) {
+	
+	if ( openStatus == 1 ){
+		openStatus = 0;
+		//抽奖
+		$.ajax({
+	    	type: "post",
+	    	url: "{php echo $this->createMobileUrl('ajax', array('op'=>'getLottory'));}",
+	    	data: "id="+$("#winning_id").val(),
+	    	dataType: "json",
+	    	cache: false,
+	    	success: function (data) { 
+				if(data.status){ 
+					isSuccess = data.idx;
+					$('#p3 .red-main').addClass('open');
+					
+					$('#p4 .success').hide();
+					$('#p4 .failure').show();
+					$('#p5').hide();
+					$('#prizeinfo').html(data.message);
+					setTimeout(function(){
+						swiper.swipeNext();
+					},1000);
+				}else{
+					alert("网络忙，请重试");
+					openStatus = 1;
+				}
+	    	}
+	    });
+	
+	}
+})
+
+$('#pp0 .btn-try-again').bind('touchend',function(event){
+	window.location.reload();
+});
+
+</script>
+
+<div style="height:0;overflow:hidden;">
+</div>
+
+<body>
+</html>

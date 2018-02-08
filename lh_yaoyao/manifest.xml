@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.we7.cc" versionCode="0.6">
+	<application setting="false">
+		<name><![CDATA[语音口令红包]]></name>
+		<identifie><![CDATA[lh_yaoyao]]></identifie>
+		<version><![CDATA[1.1.4]]></version>
+		<type><![CDATA[activity]]></type>
+		<ability><![CDATA[语音口令红包]]></ability>
+		<description><![CDATA[语音口令红包，在吸粉的同时增加游戏乐趣，增加品牌曝光！]]></description>
+		<author><![CDATA[dabaomi]]></author>
+		<url><![CDATA[http://bbs.we7.cc/]]></url>
+	</application>
+	<platform>
+		<subscribes>
+			<message type="text" />
+		</subscribes>
+		<handles>
+			<message type="text" />
+		</handles>
+		<rule embed="false" />
+	</platform>
+	<bindings>
+		<menu>
+            <entry title="活动管理" do="yaoyao" state="" direct="false" />
+            <entry title="参数设置" do="setting" state="" direct="false" />
+        </menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[
+CREATE TABLE IF NOT EXISTS ims_lh_yaoyao
+    (
+        id INT(10) NOT NULL AUTO_INCREMENT,
+        uniacid INT DEFAULT '0',
+        totalmoney INT DEFAULT '0' COMMENT '总金额',
+        minmoney INT DEFAULT '1',
+        maxmoney INT DEFAULT '1',
+        nick_name VARCHAR(32),
+        send_name VARCHAR(32),
+        wishing VARCHAR(128),
+        act_name VARCHAR(32),
+        remark VARCHAR(256),
+        createtime INT,
+        startDate VARCHAR(25),
+        endDate VARCHAR(25),
+        toprate INT DEFAULT '10',
+        nextrate VARCHAR(2000),
+        type INT(1) DEFAULT '0',
+        description text,
+        gzurl VARCHAR(400),
+        remainmoney INT DEFAULT '0',
+        logo VARCHAR(200),
+        introimageurl VARCHAR(200),
+        ruleimageurl VARCHAR(200),
+        playimageurl VARCHAR(200),
+        pyimageurl VARCHAR(200),
+        word VARCHAR(64),
+        shareflag INT(1) DEFAULT '0',
+        sharemoney INT DEFAULT '0',
+        shareimageurl VARCHAR(200),
+        share_title VARCHAR(200),
+        share_content VARCHAR(1000),
+        views INT DEFAULT '0',
+        sharecount INT DEFAULT '0',
+        percount INT DEFAULT '1',
+        sharerate INT DEFAULT '1',
+        updatetime INT,
+        title VARCHAR(255),
+        `rid` int(11) COMMENT '规则ID',
+        couponFlag char(1) default '0' comment '是否开启未中奖发放卡券',
+        couponId int(11) default 0 comment '卡券ID',
+        couponRate int(11) default 0 comment '卡券中奖概率',
+        sendType CHAR(1) DEFAULT '0' COMMENT '红包派送类型 0-按顺序 1-按概率',
+        playPerCount INT DEFAULT '10' COMMENT '每天可游戏次数',
+        hbRate int(11) default 50 comment '红包派送概率',
+        areaFlag char(1) default '0' comment '区域限制 0-不限制 1-限制',
+        provinceName varchar(32) comment '省份',
+        cityName varchar(32) comment '城市',
+        areaText varchar(64) comment '区域限制文本',
+        frontAdvFlag char(1) default '0' comment '是否开启首屏广告',
+		frontAdv varchar(500) comment '首屏广告',
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='语音红包设置';
+    
+    CREATE TABLE IF NOT EXISTS ims_lh_yaoyao_adv
+    (
+        id INT(10) NOT NULL AUTO_INCREMENT,
+        uniacid INT DEFAULT '0',
+        yaoyaoid INT,
+        imageurl VARCHAR(200),
+        name VARCHAR(200),
+        seq INT,
+        createtime INT,
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='语音红包广告设置';
+    
+    CREATE TABLE IF NOT EXISTS ims_lh_yaoyao_jiangli
+    (
+        id INT(10) NOT NULL AUTO_INCREMENT,
+        uniacid INT DEFAULT '0',
+        yaoyaoid INT,
+        userid INT,
+        ffmoney INT DEFAULT '0',
+        createtime INT,
+        touserid int(11),
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='语音红包奖励表';
+    
+    CREATE TABLE IF NOT EXISTS ims_lh_yaoyao_record
+    (
+        id INT(10) NOT NULL AUTO_INCREMENT,
+        uniacid INT DEFAULT '0',
+        uid INT,
+        ffmoney INT,
+        createtime INT,
+        yaoyaoid INT,
+        step INT DEFAULT '1',
+        status INT(1) DEFAULT '1',
+        msg VARCHAR(300),
+        source VARCHAR(200),
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='语音红包发放统计';
+    
+    CREATE TABLE IF NOT EXISTS ims_lh_yaoyao_setting
+    (
+        id INT(10) NOT NULL AUTO_INCREMENT,
+        uniacid INT DEFAULT '0',
+        mchId VARCHAR(255) COMMENT '商户号',
+        password VARCHAR(255) COMMENT '秘钥',
+        apiCert text,
+        apiKey text,
+        apiRoot text,
+        createtime INT,
+        updatetime INT,
+        serviceProviderFlag char(1) default '0' comment '是否服务商 0-否 1-是',
+        serviceProviderId int default 0 comment '服务商ID',
+		sendMode char(1) default '0' comment '发送类型 0-普通商户模式 1-服务商模式',
+		consumeFlag char(1) default '0' comment '扣钱模式 0-默认扣商户 1-扣服务商',
+        PRIMARY KEY (id)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='语音红包支付设置';
+    
+    CREATE TABLE IF NOT EXISTS ims_lh_yaoyao_money_record (
+	  `id` int(10) NOT NULL AUTO_INCREMENT,
+	  `uniacid` int(11) DEFAULT '0',
+	  `yaoyaoid` int(11),
+	  `money` int(11),
+	  `frontMoney` int(11),
+	  `afterMoney` int(11),
+	  `createtime` int(11) DEFAULT NULL,
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='金额修改记录';
+	
+	CREATE TABLE IF NOT EXISTS ims_lh_yaoyao_member (
+	  `id` int(10) NOT NULL AUTO_INCREMENT,
+	  `uniacid` int(11) DEFAULT '0',
+    `uid` int comment '用户ID', 
+	  `yaoyaoid` int(11),
+	  playPerCount int(11) default 1 comment '每人每天游戏次数',
+	  shareCount int(11) default 0 comment '分享游戏次数',
+	  `playCount` int(11) default 1 comment '游戏次数',
+	  `createtime` int(11) DEFAULT NULL,
+	  PRIMARY KEY (`id`)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='摇红包用户表';
+	
+	]]></install>
+	<uninstall><![CDATA[
+DROP TABLE IF EXISTS `ims_lh_yaoyao`;
+DROP TABLE IF EXISTS `ims_lh_yaoyao_adv`;
+DROP TABLE IF EXISTS `ims_lh_yaoyao_jiangli`;
+DROP TABLE IF EXISTS `ims_lh_yaoyao_record`;
+DROP TABLE IF EXISTS `ims_lh_yaoyao_setting`;
+DROP TABLE IF EXISTS `ims_lh_yaoyao_money_record`;
+DROP TABLE IF EXISTS `ims_lh_yaoyao_member`;
+	]]></uninstall>
+	<upgrade><![CDATA[upgrade.php]]></upgrade>
+</manifest>

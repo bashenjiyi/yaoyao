@@ -1,0 +1,192 @@
+
+  
+{template 'common/header'}
+
+<div class="clearfix">
+		<div class="alert alert-success" role="alert">
+			<p>注意：</p>
+			<p>1. 此参数设置用于设定发送红包所需的商户参数信息。</p>
+			<p>2. 身份信息用于设定活动的角色信息，当身份信息为普通商户时，说明是要进行常规活动的，当身份信息是服务商时，可以向其他特约商户提供发放红包的能力，不需要进行活动的管理。</p>
+			<p>3. 若身份信息是普通商户时，可以选择红包发送方式为普通商户，使用自己的账号信息来发送。也可以选择红包发送方式为服务商，使用服务商的账号信息来发送红包。</p>
+			<p>4. 当普通商户选择使用服务商作为红包发送方式时，当前商户必须在服务商的特约商户APPID配置中进行配置添加，发送红包时可选择扣除自己账户的钱或服务商的钱（由商户和服务商进行协商）。</p>
+		</div>
+		
+    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data">
+        <div class="panel panel-default">
+            <div class="panel-heading">参数设置</div>
+            <div class="panel-body">
+                <input type="hidden" name="id" value="{$item[id]}">
+                <input type="hidden" name="op" value="save">
+                
+                	<div class="form-group">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>身份信息</label>
+										<div class="col-sm-9 col-xs-12">
+											<label class="radio-inline">
+												<input type="radio" value="0" name="serviceProviderFlag" {if $item['serviceProviderFlag'] == '0'}checked{/if} /> 我是普通商户
+											</label>
+											<label class="radio-inline">
+												<input type="radio" value="1" name="serviceProviderFlag" {if $item['serviceProviderFlag'] == '1'}checked{/if} /> 我是服务商
+											</label>
+										</div>
+									</div>
+									
+									<div class="form-group" id="divSendMode">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>红包发送方式</label>
+										<div class="col-sm-9 col-xs-12">
+											<label class="radio-inline">
+												<input type="radio" value="0" name="sendMode" {if $item['sendMode'] == '0'}checked{/if} /> 普通商户
+											</label>
+											<label class="radio-inline">
+												<input type="radio" value="1" name="sendMode" {if $item['sendMode'] == '1'}checked{/if} /> 服务商
+											</label>
+										</div>
+									</div>
+									
+									<div class="form-group" id="divServiceProviderId">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>选择服务商</label>
+                    <div class="col-sm-8 col-xs-12">
+                    		<select name="serviceProviderId"  class="form-control">
+                    			<option value="">请选择</option>
+                    			{loop $serviceList $service}
+	                    			<option value="{$service['id']}" {if $service['id'] == $item['serviceProviderId']}selected{/if}>{$service['name']}</option>
+	                    		{/loop}
+                    		</select>
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+									
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>商户号</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="mchId" class="form-control" value="{$item['mchId']}" data-rule-required="true" />
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group"  id="divPassword">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>商户秘钥</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="password" class="form-control" value="{$item['password']}" data-rule-required="true" />
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group"  id="divConsumeFlag">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>扣钱方式</label>
+										<div class="col-sm-9 col-xs-12">
+											<label class="radio-inline">
+												<input type="radio" value="0" name="consumeFlag" {if $item['consumeFlag'] == '0'}checked{/if} /> 扣商户
+											</label>
+											<label class="radio-inline">
+												<input type="radio" value="1" name="consumeFlag" {if $item['consumeFlag'] == '1'}checked{/if} /> 扣服务商
+											</label>
+										</div>
+									</div>
+                	
+                	<div class="form-group"   id="divApiCert">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>CERT证书文件</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea name="apiCert" class="form-control" data-rule-required="true" rows="8">{$item['apiCert']}</textarea>
+                        <span class="help-block">
+                            下载证书 cert.zip 中的 apiclient_cert.pem 文件，使用文本编辑器打开后，把内容复制进去
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group" id="divApiKey">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>支付证书密钥文件</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea name="apiKey" class="form-control" data-rule-required="true" rows="8">{$item['apiKey']}</textarea>
+                        <span class="help-block">
+                            下载证书 cert.zip 中的 apiclient_key.pem 文件，使用文本编辑器打开后，把内容复制进去
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group" id="divApiRoot">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>支付根证书文件</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea name="apiRoot" class="form-control" data-rule-required="true" rows="8">{$item['apiRoot']}</textarea>
+                        <span class="help-block">
+                            下载证书 cert.zip 中的 rootca.pem 文件，使用文本编辑器打开后，把内容复制进去
+                        </span>
+                    </div>
+                	</div>
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <input name="submit" type="submit" value="提交" class="btn btn-primary col-lg-1">
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+        </div>
+    </form>
+    <script language='javascript'>
+        require(['jquery', 'util'], function ($, u) {
+            
+
+        });
+        
+				$(function(){
+					var serviceProviderFlag = $("input[name=serviceProviderFlag]:checked").val();
+					var sendMode = $("input[name=sendMode]:checked").val();
+					
+					changeServiceProviderFlag(serviceProviderFlag);
+					changeSendMode(sendMode);
+					
+					$("input[name=serviceProviderFlag]").change(function(){
+						changeServiceProviderFlag($(this).val());
+						if ($(this).val() == '0') {
+							changeSendMode($("input[name=sendMode]:checked").val());
+						}
+					});
+					
+					$("input[name=sendMode]").change(function(){
+							changeSendMode($(this).val());
+					});
+				});
+				
+				function changeSendMode(value) {
+					if (value == '0') {
+						$("#divServiceProviderId").hide();
+						$("#divPassword").show();
+						$("#divConsumeFlag").hide();
+						$("#divApiCert").show();
+						$("#divApiKey").show();
+						$("#divApiRoot").show();
+					} else {
+						$("#divServiceProviderId").show();
+						$("#divPassword").hide();
+						$("#divConsumeFlag").show();
+						$("#divApiCert").hide();
+						$("#divApiKey").hide();
+						$("#divApiRoot").hide();
+					}
+				}
+				
+				function changeServiceProviderFlag(value) {
+						if (value == '0') {
+							$("#divSendMode").show();
+							$("#divServiceProviderId").hide();
+							$("#divPassword").show();
+							$("#divConsumeFlag").hide();
+							$("#divApiCert").show();
+							$("#divApiKey").show();
+							$("#divApiRoot").show();
+						} else {
+							$("#divSendMode").hide();
+							$("#divServiceProviderId").hide();
+							$("#divPassword").show();
+							$("#divConsumeFlag").hide();
+							$("#divApiCert").show();
+							$("#divApiKey").show();
+							$("#divApiRoot").show();
+						}
+				}
+    </script>
+</div>

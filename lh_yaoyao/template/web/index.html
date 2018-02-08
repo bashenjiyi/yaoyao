@@ -1,0 +1,238 @@
+
+  
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo $this->createWebUrl('yaoyao',array('op'=>'display'));}">管理活动</a>  </li>
+		<li><a href="{php echo $this->createWebUrl('yaoyao', array('op' => 'add'));}">添加活动</a></li>
+</ul>
+
+
+<script src="{LH_YAOYAO_RES}/js/jquery-1.11.0.min.js"></script>  
+<script src="{LH_YAOYAO_RES}/js/jquery-migrate-1.2.1.min.js"></script>  
+<script src="{LH_YAOYAO_RES}/js/ajaxfileupload.js"></script> 
+<script src="{LH_YAOYAO_RES}/js/jquery.qrcode.min.js"></script> 
+
+<div style="padding:15px;">
+    <form id="form2" class="form-horizontal" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>商户名称</th>
+                <th style="width:300px;">活动时间</th>
+                <th>红包总金额</th>
+                <th>已发放红包金额</th>
+                <th style="text-align:center;width:320px;">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop $list $item}
+            <tr>
+                <td>{$item['nick_name']}</td>
+                <td>{$item['startDate']} ~ {$item['endDate']} </td>
+								<td>￥{$item['totalmoney']}</td>
+								<td>￥{$item['ffmoney']}</td>
+                <td style="text-align:center;">
+                    <a href="{php echo $this->createWebUrl('report', array('op' => 'display', 'id' => $item['id']))}" title="红包统计" data-toggle="tooltip"
+                       data-placement="top" class="btn btn-default btn-sm">红包统计
+                    </a>
+                    <a href="javascript:;" onclick="showMoneyModel('{$item['id']}');" data-toggle="tooltip"
+                       data-placement="top" class="btn btn-default btn-sm">修改红包金额
+                    </a>
+                 	  <a href="{php echo $this->createWebUrl('adv', array('op' => 'display', 'yaoyaoid' => $item['id']))}" title="广告设置" data-toggle="tooltip"
+                       data-placement="top" class="btn btn-default btn-sm">广告设置
+                    </a>
+                    <a href="javascript:;" onclick="showModel('{$item['id']}');" title="二维码" data-toggle="tooltip"
+                       data-placement="top" class="btn btn-default btn-sm">二维码
+                    </a>
+                    <a href="{php echo $this->createWebUrl('yaoyao', array('op' => 'edit', 'id' => $item['id']))}" title="编辑" data-toggle="tooltip"
+                       data-placement="top" class="btn btn-default btn-sm">编辑
+                    </a>
+                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;"
+                       href="{php echo $this->createWebUrl('yaoyao', array('op' => 'delete', 'id' => $item['id']))}"
+                       title="删除" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="fa fa-times"></i></a>
+                </td>
+            </tr>
+            {/loop}
+            </tbody>
+
+        </table>
+    {$pager}
+    </form>
+</div>
+
+<div id="qrcodeModel" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <input  type="hidden" name="cid" id="cid">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+                <h4>入口二维码</h4>
+            </div>
+            <div class="modal-body" id="qrcode" style="text-align: center;">
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">取消</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="changeMoneyModel" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <input  type="hidden" name="id" id="id" value="">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+                <h4>修改红包总额(金额小于0，则会减少总的红包金额)</h4>
+            </div>
+            <div class="modal-body" id="qrcode" style="text-align: center;">
+            		<form>
+				          <div class="form-group">
+				            <label for="recipient-name" class="control-label" style="display:block;text-align:left;">增加的金额：</label>
+				            <input type="number" class="form-control" id="price" name="price" value="" placeholder="请输入金额" />
+				          </div>
+				        </form>
+            </div>
+
+            <div class="modal-footer">
+            		<button type="button" class="btn btn-primary" id="btnSave">保存</button>
+            		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    require(['bootstrap'], function ($) {
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+    
+    function showMoneyModel(id){
+    		$("#id").val(id);
+    		$("#price").val("");
+        $('#changeMoneyModel').modal();
+    }
+    
+    function showModel(id){
+				var url = "{php echo murl('entry', array('m' => 'lh_yaoyao', 'do' => 'index'), true, true); }" + "&id=" + id;
+				$('#qrcode').html("");
+        $('#qrcode').qrcode(url);
+        $('#qrcodeModel').modal();
+    }
+
+    $(function() {
+    	
+    	$("#btnSave").click(function(){
+    		var id = $("#id").val();
+    		var price = $("#price").val();
+    		
+    		if (price == '') {
+    			alert("金额不能为空");
+    			return false;
+    		}
+    		
+    		$.ajax({
+            type : "POST",
+            url : "{php echo $this->createWebUrl('ajax', array('op'=>'saveMoney'))}",
+            data : {id: id, price: price},
+            dataType : "json",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success : function(data){
+                if(data.code == 0){
+                	alert("修改金额成功");
+                  location.reload(true);
+                } else {
+                	alert(data.message);
+                }
+            },
+            error : function(data){
+
+            }
+        });
+    		
+    	});
+    	
+    	$("#btnImport").click(function(){
+      		$("#fileToUpload").click();
+    	});
+    	
+    	//选择文件之后执行上传  
+	    $('#fileToUpload').on('change', function() { 
+	        $.ajaxFileUpload({  
+	            url:'{php echo $this->createWebUrl('ajax'); }',  
+	            secureuri:false,  
+	            fileElementId:'fileToUpload',//file标签的id  
+	            dataType : "json",
+	            success: function (data) {  
+	            	if (data.code == 0) {
+	            		alert('导入成功！');
+	            		window.location.reload();
+	            	} else {
+	            		alert(data.message);
+	            	}
+	            },  
+	            error: function (data, status, e) {  
+	                alert(e);  
+	            }  
+	        });  
+	    });  
+	      
+    	
+        $("#ajaxUpdateTop").click(function() {
+            var data = {};
+            var id=$('#cid').val();
+            var day=$('#day').val();
+            data['id']=id;
+            if($('#day').val() == ''){
+                alert('请设置置顶时间。');
+                return false;
+            }
+            data['day']=day;
+            var url = "{php echo $this->createWebUrl('ajaxUpdateTop')}";
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : data,
+                dataType : "json",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success : function(data){
+                    console.log(data);
+                    if(data && data.code ==200){
+                       location.reload(true);
+                    }else{
+
+                    }
+                },
+                error : function(data){
+
+                }
+            });
+        });
+    });
+
+    function setProperty(obj, id,type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('card',array('op'=>'setstatus'))}",{id: id,type: type,data: obj.getAttribute("data")},function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'status') {
+                $(obj).html(d.data == '0' ? '正常' : '待审核');
+            }
+            if (type == 'user_status') {
+                $(obj).html(d.data == '1' ? '正常' : '拉黑');
+            }
+
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+
+            }
+        }, "json");
+    }
+</script>

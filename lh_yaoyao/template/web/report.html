@@ -1,0 +1,170 @@
+
+  
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li ><a href="{php echo $this->createWebUrl('yaoyao',array('op'=>'display'));}">管理活动</a>  </li>
+		<li class="active"><a href="javascript:;">红包统计</a></li>
+</ul>
+
+
+<script src="{LH_YAOYAO_RES}/js/jquery-1.11.0.min.js"></script>  
+<script src="{LH_YAOYAO_RES}/js/jquery-migrate-1.2.1.min.js"></script>  
+<script src="{LH_YAOYAO_RES}/js/ajaxfileupload.js"></script> 
+
+<div style="padding:15px;">
+		<div class="alert alert-success" role="alert">
+			<p>特殊说明：若一个用户摇到红包后，由于微信支付营销账户内没有足够的金额或微信支付接口访问等原因，导致红包没有正常发送，此用户的中奖状态为已中奖。</p>
+		</div>
+	
+    <form id="form2" class="form-horizontal" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th style="width:80px;">昵称</th>
+                <th style="width:240px;">OPENID</th>
+                <th style="width:80px;">领取金额</th>
+                <th style="width:80px;">中奖状态</th>
+                <th>发送失败原因</th>
+                <th style="width:180px;">领取时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop $list $item}
+            <tr>
+                <td>{$item['nickname']}</td>
+                <td>{$item['openid']}</td>
+                <td>￥{$item['ffmoney']}</td>
+                <td>
+	            			{if $item['status'] == 1}
+	            				<font color="green">已中奖</font>
+	                	{else}
+	                		<font color="red">未中奖</font>
+	                	{/if}
+                </td>
+								<td>{$item['msg']}</td>
+								<td>{php echo date("Y-m-d H:i:s", $item["createtime"]); }</td>
+            </tr>
+            {/loop}
+            </tbody>
+
+        </table>
+    {$pager}
+    </form>
+</div>
+
+<div id="modal-upCreatetime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <input  type="hidden" name="cid" id="cid">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">&times;</button>
+                <h4>置顶时间</h4>
+            </div>
+            <div class="modal-body">
+                <label for="upCreatetimeval" class="control-label">置顶时间: </label>
+                <div class="input-group">
+                    <input type="text" id='day' name="day" class="form-control" value="{$item['day']}" />
+                    <span class="input-group-addon">天/分钟</span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <a href="javascript:void()" id="ajaxUpdateTop" class="btn btn-primary" >置顶时间</a>
+                <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">取消</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    require(['bootstrap'], function ($) {
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+    function showModel(id){
+        $('#cid').val(id);
+        $('#modal-upCreatetime').modal();
+    }
+
+    $(function() {
+    	
+    	$("#btnImport").click(function(){
+      		$("#fileToUpload").click();
+    	});
+    	
+    	//选择文件之后执行上传  
+	    $('#fileToUpload').on('change', function() { 
+	        $.ajaxFileUpload({  
+	            url:'{php echo $this->createWebUrl('ajax'); }',  
+	            secureuri:false,  
+	            fileElementId:'fileToUpload',//file标签的id  
+	            dataType : "json",
+	            success: function (data) {  
+	            	if (data.code == 0) {
+	            		alert('导入成功！');
+	            		window.location.reload();
+	            	} else {
+	            		alert(data.message);
+	            	}
+	            },  
+	            error: function (data, status, e) {  
+	                alert(e);  
+	            }  
+	        });  
+	    });  
+	      
+    	
+        $("#ajaxUpdateTop").click(function() {
+            var data = {};
+            var id=$('#cid').val();
+            var day=$('#day').val();
+            data['id']=id;
+            if($('#day').val() == ''){
+                alert('请设置置顶时间。');
+                return false;
+            }
+            data['day']=day;
+            var url = "{php echo $this->createWebUrl('ajaxUpdateTop')}";
+            $.ajax({
+                type : "POST",
+                url : url,
+                data : data,
+                dataType : "json",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success : function(data){
+                    console.log(data);
+                    if(data && data.code ==200){
+                       location.reload(true);
+                    }else{
+
+                    }
+                },
+                error : function(data){
+
+                }
+            });
+        });
+    });
+
+    function setProperty(obj, id,type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('card',array('op'=>'setstatus'))}",{id: id,type: type,data: obj.getAttribute("data")},function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'status') {
+                $(obj).html(d.data == '0' ? '正常' : '待审核');
+            }
+            if (type == 'user_status') {
+                $(obj).html(d.data == '1' ? '正常' : '拉黑');
+            }
+
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+
+            }
+        }, "json");
+    }
+</script>

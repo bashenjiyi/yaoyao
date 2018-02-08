@@ -1,0 +1,713 @@
+
+  
+{template 'common/header'}
+
+<script src="{LH_YAOYAO_RES}/js/address.js"></script> 
+
+<ul class="nav nav-tabs">
+    <li><a href="{php echo $this->createWebUrl('yaoyao',array('op'=>'display'));}">管理活动</a>  </li>
+		<li class="active"><a href="{php echo $this->createWebUrl('yaoyao', array('op' => 'add'));}">添加活动</a></li>
+</ul>
+
+<div class="clearfix">
+    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data">
+        <div class="panel panel-default">
+            <div class="panel-heading">活动管理</div>
+            <div class="panel-body">
+                <input type="hidden" name="id" value="{$item[id]}">
+                <input type="hidden" name="op" value="save">
+                
+                <div class="form-group model1">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>活动开始时间</label>
+
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_date('startDate', $item['startDate'], 1)}
+                    </div>
+                </div>
+                <div class="form-group model1">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>活动结束时间</label>
+
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_date('endDate', $item['endDate'], 1)}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>活动名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="title" class="form-control" value="{$item['title']}" data-rule-required="true" />
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>商户名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="nick_name" class="form-control" value="{$item['nick_name']}" data-rule-required="true" />
+                        <span class="help-block">
+                            不超过9个字符
+                        </span>
+                    </div>
+                	</div>
+                	
+                <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>商户LOGO</label>
+                     <div class="col-sm-9">
+                         {php echo tpl_form_field_image('logo', $item['logo'])}
+                        <span class="help-block">
+                            建议图片大小为： 150*24，建议使用透明背景色
+                        </span>
+                     </div>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>商户介绍图片</label>
+                     <div class="col-sm-9">
+                         {php echo tpl_form_field_image('introimageurl', $item['introimageurl'])}
+                        <span class="help-block">
+                            建议图片大小为： 560*800
+                        </span>
+                     </div>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>活动规则背景图片</label>
+                     <div class="col-sm-9">
+                         {php echo tpl_form_field_image('ruleimageurl', $item['ruleimageurl'])}
+                        <span class="help-block">
+                            建议图片大小为： 640*800
+                        </span>
+                     </div>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>播放声音背景图片</label>
+                     <div class="col-sm-9">
+                         {php echo tpl_form_field_image('playimageurl', $item['playimageurl'])}
+                        <span class="help-block">
+                            建议图片大小为： 640*740
+                        </span>
+                     </div>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>声音提醒图片</label>
+                     <div class="col-sm-9">
+                         {php echo tpl_form_field_image('pyimageurl', $item['pyimageurl'])}
+                        <span class="help-block">
+                            建议图片大小为： 500*260
+                        </span>
+                     </div>
+                 </div>
+                 
+                  <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>声音文字</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="word" class="form-control" value="{$item['word']}" data-rule-required="true" />
+                        <span class="help-block">
+                            不超过30个字符，匹配声音后会进行抢红包活动
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>红包活动名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="act_name" class="form-control" value="{$item['act_name']}" data-rule-required="true" />
+                        <span class="help-block">
+                            不超过9个字符
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>活动备注</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea name="remark" class="form-control" data-rule-required="true">{$item['remark']}</textarea>
+                        <span class="help-block">
+                            不超过88个字符
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>红包祝福语</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="wishing" class="form-control" value="{$item['wishing']}" data-rule-required="true" />
+                        <span class="help-block">
+                            不超过42个字符
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>活动总金额</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="totalmoney" class="form-control" value="{$item['totalmoney']}" data-rule-required="true" />
+                        <span class="help-block">
+                            确保在微信商户平台中充入足够的金额
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>发放金额范围(1-200)</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="minmoney" class="form-control" style="width: 120px;display: inline;" value="{$item['minmoney']}" data-rule-required="true" data-rule-positive="true"  />&nbsp;元 - 
+                        <input type="text" name="maxmoney" class="form-control" style="width: 120px;display: inline;" value="{$item['maxmoney']}" data-rule-required="true" data-rule-positive="true"  />&nbsp;元
+                        <span class="help-block">
+                            若发放固定金额，则最小金额和最大金额填写一样的值，最小金额至少为1元，最大金额不超过200
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label"><font color="red">*</font>红包发放方式</label>
+										<div class="col-sm-9 col-xs-12">
+											<label class="radio-inline">
+												<input type="radio" value="0" name="sendType"  checked/> 按顺序发放
+											</label>
+											<label class="radio-inline">
+												<input type="radio" value="1" name="sendType" /> 按概率发放
+											</label>
+										</div>
+									</div>
+                	
+                	<div class="form-group" id="sendType0" style="display:none;">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>发放金额策略</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="toprate"  class="form-control" style="width: 120px;display: inline;" value="{$item['toprate']}" data-rule-required="true" data-rule-positive="true"  />&nbsp;人必中奖，以后每隔
+                        <input type="text" name="nextrate" class="form-control" style="width: 120px;display: inline;" value="{$item['nextrate']}" data-rule-required="true" data-rule-positive="true"  />&nbsp;人中奖
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+            		<div class="form-group" id="sendType1" style="display:none;">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">红包中奖概率</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="number" name="hbRate" class="form-control" style="width: 120px;display: inline;" value="50" data-rule-positive="true" data-rule-required="true" />&nbsp;请输入0到100的值，值越高说明中奖的概率越高
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>每人最多能领几个红包</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="number" name="percount" class="form-control" style="width: 120px;display: inline;" value="{$item['percount']}" data-rule-positive="true" data-rule-required="true" />&nbsp;个
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>每人每天可摇红包次数</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="number" name="playPerCount" class="form-control" style="width: 120px;display: inline;" value="10" data-rule-positive="true" data-rule-required="true" />&nbsp;次
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启分享奖励</label>
+										<div class="col-sm-9 col-xs-12">
+											<label class="radio-inline">
+												<input type="radio" value="1" name="shareflag"/> 开启
+											</label>
+											<label class="radio-inline">
+												<input type="radio" value="0" name="shareflag" checked/> 关闭
+											</label>
+											<span class="help-block">
+                            若开启分享奖励后，分享人可获得额外的摇红包次数，每邀请一个人来，可增加一次摇红包次数，此次数不受每天可摇红包次数的限制
+                        </span>
+										</div>
+									</div>
+                	
+                	<div class="form-group">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label">未中奖发送卡券</label>
+										<div class="col-sm-9 col-xs-12">
+											<label class="radio-inline">
+												<input type="radio" value="1" name="couponFlag" /> 开启
+											</label>
+											<label class="radio-inline">
+												<input type="radio" value="0" name="couponFlag"checked /> 关闭
+											</label>
+										</div>
+									</div>
+
+								<input type="hidden" name="couponId" id="couponId" value="{$item['couponId']}" />
+
+                	<div class="form-group">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label">卡券奖品</label>
+										<div class="col-sm-8 col-xs-12">
+											<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" id="add_coupon">选项卡券</button>
+											&nbsp;<label style="color:red;">卡券发放策略由系统卡券自动维护</label>
+										</div>
+										<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h4 class="modal-title">选择卡券</h4>
+													</div>
+													<div class="modal-body">
+														<table class="table">
+															<tr>
+																<th style="width: 50px">选择</th>
+																<th style="width: 120px">卡券名称</th>
+																<th style="width: 180px">类型</th>
+																<th>折扣</th>
+															</tr>
+															{loop $coupons $coupon}
+															<tr>
+																<td><input type="radio" name="coupons" id="coupon" class="coupon check" value="{$coupon['id']}" {if is_array($item['coupons']) && in_array($coupon['id'], array_keys($item['coupons']))}checked{/if} data-title="{$coupon['title']}" data-type="{$coupon['type']}"></td>
+																<td>{$coupon['title']}</td>
+																<td>{if $coupon['type'] == 1}折扣券
+																	{elseif $coupon['type'] == 2}代金券
+																	{elseif $coupon['type'] == 3}礼品券
+																	{elseif $coupon['type'] == 4}团购券
+																	{elseif $coupon['type'] == 5}优惠券
+																	{/if}
+																</td>
+																<td>{if $coupon['type'] == 1}打{php echo $coupon['extra']['discount']*0.1}折
+																	{elseif $coupon['type'] == 2}满{php echo $coupon['extra']['least_cost']*0.01}元 减 {php echo $coupon['extra']['reduce_cost']*0.01}元
+																	{elseif $coupon['type'] == 3}{$coupon['extra']['deal_detail']}
+																	{elseif $coupon['type'] == 4}{$coupon['extra']['gift']}
+																	{elseif $coupon['type'] == 5}{$coupon['extra']['default_detail']}
+																	{/if}
+																</td>
+															</tr>
+															{/loop}
+														</table>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-primary" id="save" data-dismiss="modal">保存</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group" id="coupon_table">
+										<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger"></span></label>
+										<div class="col-sm-8 col-xs-12">
+											<table class="table" style="width: 380px">
+												{if !empty($couponInfo)}
+												<tr>
+													<th style="width: 50px">名称</th>
+													<th style="width: 50px">类型</th>
+												</tr>
+												{/if}
+												<tbody id="coupon_list">
+												<tr>
+													<td style="width: 50px">{$couponInfo['title']}</td>
+													<td style="width: 50px">{if $couponInfo['type'] == 1}折扣券{else}代金券{/if}</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+			
+			         		<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">卡券中奖概率</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="number" name="couponRate" class="form-control" style="width: 120px;display: inline;" value="50" data-rule-positive="true" data-rule-required="true" />&nbsp;请输入0到100的值，值越高说明中奖的概率越高
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+            	  	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>游戏规则</label>
+                    <div class="col-sm-8">
+                    	{php echo tpl_ueditor('description', $item['description']);}
+                    </div>
+                	</div>
+                	
+            	 		<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">一键关注链接</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="gzurl" class="form-control" value="{$item['gzurl']}" />
+                        <span class="help-block">
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享图标</label>
+                     <div class="col-sm-9">
+                         {php echo tpl_form_field_image('shareimageurl', $item['shareimageurl'])}
+                        <span class="help-block">
+                            建议图片大小为： 80*80
+                        </span>
+                     </div>
+                 </div>
+                 
+                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>分享标题</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="share_title" class="form-control" value="{$item['share_title']}" data-rule-required="true" data-rule-maxlength="100" value=""  />
+                        <span class="help-block">
+                        		不超过100个字符
+                        </span>
+                    </div>
+                	</div>
+                	
+                	<div class="form-group">
+                    <label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label"><font color="red">*</font>分享简介</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea name="share_content" class="form-control" data-rule-required="true"  data-rule-maxlength="300">{$item['share_content']}</textarea>
+                        <span class="help-block">
+                            不超过200个字符，XX代表当前用户名称
+                        </span>
+                    </div>
+                	</div>
+                
+            </div>
+        </div>
+        
+        <div class="panel panel-default">
+					<div class="panel-heading">
+						首屏广告 <span class="text-muted"></span>
+					</div>
+					<div class="panel-body">
+						
+						<div class="form-group">
+								<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启首屏广告</label>
+								<div class="col-sm-9 col-xs-12">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="frontAdvFlag" {if $item['frontAdvFlag'] == '1'}checked{/if} /> 开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="frontAdvFlag" {if $item['frontAdvFlag'] == '0'}checked{/if} /> 关闭
+									</label>
+									<span class="help-block">
+	                    开启后，用户点击或3秒钟后可进入活动主页
+	                </span>
+								</div>
+							</div>
+									
+							<div class="form-group">
+                 <label class="col-xs-12 col-sm-3 col-md-2 control-label">首屏广告</label>
+                 <div class="col-sm-9">
+                     {php echo tpl_form_field_image('frontAdv', $item['frontAdv'])}
+                    <span class="help-block">
+                        建议图片大小为： 640*960
+                    </span>
+                 </div>
+             </div>
+						
+					</div>
+				</div>
+				
+        <div class="panel panel-default">
+					<div class="panel-heading">
+						地理位置 <span class="text-muted"></span>
+					</div>
+					<div class="panel-body">
+						
+						<div class="form-group">
+								<label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启地理位置限制</label>
+								<div class="col-sm-9 col-xs-12">
+									<label class="radio-inline">
+										<input type="radio" value="1" name="areaFlag" {if $item['areaFlag'] == '1'}checked{/if} /> 开启
+									</label>
+									<label class="radio-inline">
+										<input type="radio" value="0" name="areaFlag" {if $item['areaFlag'] == '0'}checked{/if} /> 关闭
+									</label>
+									<span class="help-block">
+	                    开始地理位置限制后，可以限制活动在特定的省份或城市进行。
+	                </span>
+								</div>
+							</div>
+									
+						<div class="form-group">
+						  <label class="col-sm-2 control-label">
+						    <i>*</i>活动位置</label>
+						  <div class="col-sm-3">
+						    <select name="provinceName" id="input_province" class="form-control">
+						      <option value="">--请选择--</option></select>
+						  </div>
+						  <div class="col-sm-3">
+						    <select name="cityName" id="input_city" class="form-control">
+						      <option value="">--请选择--</option>
+						    </select>
+						  </div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">地理限制提示</label>
+							<div class="col-sm-6 col-xs-12">
+								<input type="text" class="form-control" placeholder="请输入不在区域内进行活动的提示信息" name="areaText" value="{$item['areaText']}"/>
+							</div>
+							<span class="help-block">
+                XXX代表地理信息，例如：只限制在XXX访问
+              </span>
+						</div>
+						
+					</div>
+				</div>
+				
+        <div class="panel panel-default">
+					<div class="panel-heading">
+						功能封面 <span class="text-muted"></span>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">触发关键字</label>
+							<div class="col-sm-6 col-xs-12">
+								<input type="text" class="form-control" placeholder="请输入触发关键字" name="replyKeyword" value="{$ruleInfo['content']}"/>
+							</div>
+							<div class="col-sm-3">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-xs-12 col-sm-3 col-md-2 control-label">封面参数</label>
+							<div class="col-sm-9">
+								<div class="panel panel-default reply-container" style="padding-top:2em;">
+									<div ng-hide="entry.saved">
+										<div class="form-group">
+											<label class="col-xs-12 col-sm-3 col-md-2 control-label">标题</label>
+											<div class="col-sm-9 col-xs-12">
+												<input type="text" class="form-control" placeholder="标题" name="replyTitle" value="{$replyInfo['title']}" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-xs-12 col-sm-3 col-md-2 control-label">封面</label>
+											<div class="col-sm-9 col-xs-12">
+												{php echo tpl_form_field_image('replyThumb', $replyInfo['thumb'], '', array('width' => 400));}
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-xs-12 col-sm-3 col-md-2 control-label">描述</label>
+											<div class="col-sm-9 col-xs-12">
+												<textarea class="form-control" placeholder="添加图文消息的简短描述" name="replySummary" >{$replyInfo['description']}</textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <input name="submit" type="submit" value="提交" class="btn btn-primary col-lg-1">
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+        </div>
+    </form>
+    <script language='javascript'>
+        require(['jquery', 'util'], function ($, u) {
+        });
+        
+        
+        $(function () {
+        	  // 初始化地理位置
+		        var html = "";
+		        $("#input_city").append(html);
+		        $.each(pdata,function(idx,item){
+		            if (parseInt(item.level) == 0) {
+		                html += "<option value='" + item.names + "' exid='" + item.code + "'>" + item.names + "</option>";
+		            }
+		        });
+		        $("#input_province").append(html);
+		        $("#input_province").change(function(){
+		            if ($(this).val() == "") return;
+		            $("#input_city option").remove();
+		            var code = $(this).find("option:selected").attr("exid"); code = code.substring(0,2);
+		            var html = "<option value=''>--请选择--</option>"; $("#input_area").append(html);
+		            $.each(pdata,function(idx,item){
+		                if (parseInt(item.level) == 1 && code == item.code.substring(0,2)) {
+		                    html += "<option value='" + item.names + "' exid='" + item.code + "'>" + item.names + "</option>";
+		                }
+		            });
+		            $("#input_city").append(html);
+		        });
+				});
+				
+				var coupons = new Array();
+        
+				$(function(){
+						$("input[name='sendType']").click(function(){
+							var sendType = $("input[name='sendType']:checked").val();
+							if (sendType == '0') {
+								$("#sendType0").show();
+								$("#sendType1").hide();
+							} else {
+								if (sendType == '1') {
+									$("#sendType0").hide();
+									$("#sendType1").show();
+								}
+							}
+						});
+						
+						$("input[name='sendType']:checked").trigger("click");
+					
+					$('.check').click(function() {
+						var check = $(this).prop('checked');
+						if (check) {
+							coupons = new Array();
+							coupons = [{'couponid' : $(this).val(), 'title' : $(this).data('title'), 'type' : $(this).data('type')}];
+						} else {
+							delete coupons[$(this).val()];
+						}
+				});
+				$('#save').click(function() {
+					$('#coupon_list').html('');
+					var types = {"1":{"title":"折扣券","value":"discount"},"2":{"title":"代金券","value":"cash"},"4":{"title":"礼品券","value":"gift"},"3":{"title":"团购券","value":"groupon"},"5":{"title":"优惠券","value":"general_coupon"}};
+					var type_num = coupons[0].type;
+					var type = types[type_num].title;
+					var title = coupons[0].title;
+					$('#coupon_list').append(
+						'<tr>' +
+						'<td style="width: 50px">' + title + '</td>' +
+						'<td style="width: 50px">' + type + '</td>' +
+						'</tr>'
+					);
+					$("#couponId").val(coupons[0].couponid);
+				});
+				
+					var id = $("input[name=id]").val();
+					
+					setDefaultImage(id, 'logo', 'img/logo.png');
+					setDefaultImage(id, 'introimageurl', 'img/pic-index-1.png');
+					setDefaultImage(id, 'ruleimageurl', 'img/bg-rule-1.png');
+					setDefaultImage(id, 'playimageurl', 'img/bg-play-1.png');
+					setDefaultImage(id, 'pyimageurl', 'img/pic-slogan-1.png');
+					
+					$('form').submit(function() {
+						var startDate = $('[name="startDate"]').val();
+						var endDate = $('[name="endDate"]').val();
+						var title = $('[name="title"]').val();
+						var nick_name = $('[name="nick_name"]').val();
+						var logo = $('[name="logo"]').val();
+						var introimageurl = $('[name="introimageurl"]').val();
+						var ruleimageurl = $('[name="ruleimageurl"]').val();
+						var playimageurl = $('[name="playimageurl"]').val();
+						var pyimageurl = $('[name="pyimageurl"]').val();
+						var word = $('[name="word"]').val();
+						var act_name = $('[name="act_name"]').val();
+						var remark = $('[name="remark"]').val();
+						var wishing = $('[name="wishing"]').val();
+						var totalmoney = $('[name="totalmoney"]').val();
+						var minmoney = $('[name="minmoney"]').val();
+						var maxmoney = $('[name="maxmoney"]').val();
+						
+						var sendType = $("input[name='sendType']:checked").val();
+						var toprate = $('[name="toprate"]').val();
+						var nextrate = $('[name="nextrate"]').val();
+						var hbRate = $('[name="hbRate"]').val();
+						
+						var percount = $('[name="percount"]').val();
+						
+						var couponFlag = $("input[name='couponFlag']:checked").val();
+						var couponId = $('#couponId').val();
+						var couponRate = $('[name="couponRate"]').val();
+						
+						if (startDate >= endDate) {
+							util.message('活动结束时间必须大于活动开始时间', '', 'info');
+							return false;
+						}
+						if (title == '') {
+							util.message('请输入活动标题', '', 'info');
+							return false;
+						}
+						if (nick_name == '') {
+							util.message('请输入商户名称', '', 'info');
+							return false;
+						}
+						if (logo == '') {
+							util.message('请选择商户LOGO', '', 'info');
+							return false;
+						}
+						if (introimageurl == '') {
+							util.message('请选择商户介绍图片', '', 'info');
+							return false;
+						}
+						if (ruleimageurl == '') {
+							util.message('请选择活动规则背景图片', '', 'info');
+							return false;
+						}
+						if (playimageurl == '') {
+							util.message('请选择播放声音背景图片', '', 'info');
+							return false;
+						}
+						if (pyimageurl == '') {
+							util.message('请选择声音提醒图片', '', 'info');
+							return false;
+						}
+						if (word == '') {
+							util.message('请输入声音文字', '', 'info');
+							return false;
+						}
+						if (act_name == '') {
+							util.message('请输入红包活动名称', '', 'info');
+							return false;
+						}
+						if (remark == '') {
+							util.message('请输入活动备注', '', 'info');
+							return false;
+						}
+						if (wishing == '') {
+							util.message('请输入红包祝福语', '', 'info');
+							return false;
+						}
+						if (totalmoney == '') {
+							util.message('请输入活动总金额', '', 'info');
+							return false;
+						}
+						if (minmoney == '') {
+							util.message('请输入发放金额范围最小值', '', 'info');
+							return false;
+						}
+						if (maxmoney == '') {
+							util.message('请输入发放金额范围最大值', '', 'info');
+							return false;
+						}
+						
+						if (sendType == '0') {
+							if (toprate == '') {
+								util.message('请输入发放金额策略', '', 'info');
+								return false;
+							}
+							if (nextrate == '') {
+								util.message('请输入发放金额策略', '', 'info');
+								return false;
+							}
+						} else {
+							if (hbRate == '') {
+								util.message('请输入红包派送概率', '', 'info');
+								return false;
+							}
+						}
+						
+						if (nextrate == '') {
+							util.message('请输入每人最多能领几个红包', '', 'info');
+							return false;
+						}
+						
+						if (couponFlag == '1' && couponId == '') {
+							util.message('开启未中奖送卡券时，请选择一个卡券', '', 'info');
+							return false;
+						}
+						
+						if (couponRate < 0 || couponRate > 100) {
+							util.message('卡券中奖概率只能设置0到100之间', '', 'info');
+							return false;
+						}
+						
+					});
+				});
+				
+				function setDefaultImage(id, value, defaultValue) {
+					var obj = $("input[name=" + value + "]");
+					if (obj.val() == defaultValue || id == '') {
+						obj.val(defaultValue);
+						obj.parent().parent().find("img").attr("src", "{LH_YAOYAO_RES}/" + defaultValue);
+					}
+				}
+    </script>
+</div>

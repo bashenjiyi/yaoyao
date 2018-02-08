@@ -1,0 +1,57 @@
+
+  
+{template 'common/header'}
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo $this->createWebUrl('adv',array('op'=>'display', 'yaoyaoid'=>$yaoyaoid));}">广告设置</a>  </li>
+		<li><a href="{php echo $this->createWebUrl('adv', array('op' => 'add', 'yaoyaoid'=>$yaoyaoid));}">添加广告</a></li>
+		<li style="float:right;"><a href="{php echo $this->createWebUrl('yaoyao');}">返回活动</a></li>
+</ul>
+
+
+<script src="{LH_YAOYAO_RES}/js/jquery-1.11.0.min.js"></script>  
+<script src="{LH_YAOYAO_RES}/js/jquery-migrate-1.2.1.min.js"></script>  
+
+<div style="padding:15px;">
+    <form id="form2" class="form-horizontal" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>广告图</th>
+                <th>祝福语</th>
+                <th>序号</th>
+                <th style="text-align:center;width:320px;">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {loop $list $item}
+            <tr>
+                <td>
+									<img src="{if $item['imageurl'] == 'img/bg-title-3.png'}{LH_YAOYAO_RES}/{$item['imageurl']}{else}{$_W['attachurl']}{$item['imageurl']}{/if}"  style="max-width:120px;" />                	
+                </td>
+								<td>{$item['name']}</td>
+								<td>{$item['seq']}</td>
+                <td style="text-align:center;">
+                    <a href="{php echo $this->createWebUrl('adv', array('op' => 'edit', 'id' => $item['id']))}" title="编辑" data-toggle="tooltip"
+                       data-placement="top" class="btn btn-default btn-sm">编辑
+                    </a>
+                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;"
+                       href="{php echo $this->createWebUrl('adv', array('op' => 'delete', 'id' => $item['id']))}"
+                       title="删除" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm"><i class="fa fa-times"></i></a>
+                </td>
+            </tr>
+            {/loop}
+            </tbody>
+
+        </table>
+    {$pager}
+    </form>
+</div>
+
+<script type="text/javascript">
+    require(['bootstrap'], function ($) {
+    });
+    
+    $(function() {
+    	});
+    	
+</script>
